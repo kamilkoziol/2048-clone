@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { cloneDeep } from "lodash";
+import { clear } from "@testing-library/user-event/dist/clear";
 
 const use2048 = (size) => {
   const [board, setBoard] = useState([
@@ -8,6 +9,8 @@ const use2048 = (size) => {
     [0, 0, 0, 0],
     [0, 0, 0, 0],
   ]);
+
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
     let initBoard = generateNewTile(board);
@@ -53,8 +56,6 @@ const use2048 = (size) => {
       row = combineRowLeft(row);
       newGrid[i] = row;
     }
-    console.table(oldGrid);
-    console.table(newGrid);
 
     if (JSON.stringify(oldGrid) !== JSON.stringify(newGrid)) {
       newGrid = generateNewTile(newGrid);
@@ -134,6 +135,7 @@ const use2048 = (size) => {
       } else if (row[slow] !== 0 && row[slow] !== 0) {
         if (row[slow] === row[fast]) {
           row[slow] += row[fast];
+          addScore(row[slow]);
           row[fast] = 0;
           slow--;
           fast = slow - 1;
@@ -167,6 +169,7 @@ const use2048 = (size) => {
       } else if (row[slow] !== 0 && row[fast] !== 0) {
         if (row[slow] === row[fast]) {
           row[slow] += row[fast];
+          addScore(row[slow]);
           row[fast] = 0;
           slow++;
           fast += 1;
@@ -179,7 +182,24 @@ const use2048 = (size) => {
     return row;
   }
 
-  return { board, handleKeyUp };
+  function addScore(scoreToAdd) {
+    setScore((prev) => prev + scoreToAdd);
+  }
+
+  function startNewGame() {
+    setScore(0);
+    let clearBoard = [
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+    ];
+    clearBoard = generateNewTile(clearBoard);
+    clearBoard = generateNewTile(clearBoard);
+    setBoard(clearBoard);
+  }
+
+  return { board, score, startNewGame, handleKeyUp };
 };
 
 export default use2048;

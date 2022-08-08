@@ -1,16 +1,28 @@
 import React from "react";
-import Tile from "./Tile";
-const Board = ({ board }) => {
-  return (
-    <div className="grid grid-cols-4 gap-4 bg-board">
-      {board.map((row) => {
-        let newRow = [];
-        return row.map((element) => {
-          return <Tile number={element} />;
-        });
-      })}
-    </div>
-  );
+import Cell from "./Cell";
+import clsx from "clsx";
+
+const Board = ({ board, size }) => {
+  const cells = [];
+  for (let i = 0; i < size; i++) {
+    for (let j = 0; j < size; j++) {
+      cells.push(<Cell tile={board[i][j]} />);
+    }
+  }
+
+  const classes = clsx([
+    "grid",
+    `grid-cols-${size}`,
+    `grid-rows-${size}`,
+    "w-96",
+    "h-96",
+    "bg-board",
+    "p-2",
+    "rounded",
+  ]);
+  console.log(classes);
+
+  return <div className={classes}>{cells}</div>;
 };
 
 export default Board;
