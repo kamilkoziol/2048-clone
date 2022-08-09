@@ -2,10 +2,11 @@ import React from "react";
 import Cell from "./Cell";
 import clsx from "clsx";
 
-const Board = ({ board, size }) => {
+const Board = ({ board }) => {
+  const size = board.length;
   const cells = [];
-  for (let i = 0; i < size; i++) {
-    for (let j = 0; j < size; j++) {
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board.length; j++) {
       cells.push(<Cell tile={board[i][j]} />);
     }
   }
@@ -20,7 +21,6 @@ const Board = ({ board, size }) => {
     "p-2",
     "rounded",
   ]);
-  console.log(classes);
 
   return <div className={classes}>{cells}</div>;
 };

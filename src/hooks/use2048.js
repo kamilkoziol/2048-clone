@@ -1,36 +1,86 @@
 import { useEffect, useState } from "react";
 import { cloneDeep } from "lodash";
-import { clear } from "@testing-library/user-event/dist/clear";
 
-const use2048 = (size) => {
-  const [board, setBoard] = useState([
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-  ]);
+const use2048 = (size, setIsModalOpened) => {
+  const [board, setBoard] = useState(() => {
+    const newBoard = new Array(size);
+    for (let i = 0; i < size; i++) {
+      let newRow = new Array(size);
+      for (let j = 0; j < size; j++) {
+        newRow[j] = 0;
+      }
+      newBoard[i] = newRow;
+    }
+    let search = true;
+    while (search) {
+      const index1 = Math.floor(Math.random() * newBoard.length);
+      const index2 = Math.floor(Math.random() * newBoard.length);
+      if (newBoard[index1][index2] === 0) {
+        newBoard[index1][index2] = Math.random() > 0.05 ? 2 : 4;
+        search = false;
+      }
+    }
 
+    search = true;
+    while (search) {
+      const index1 = Math.floor(Math.random() * newBoard.length);
+      const index2 = Math.floor(Math.random() * newBoard.length);
+      if (newBoard[index1][index2] === 0) {
+        newBoard[index1][index2] = Math.random() > 0.05 ? 2 : 4;
+        search = false;
+      }
+    }
+    return newBoard;
+  });
   const [score, setScore] = useState(0);
+  const [isChoosingSize, setIsChoosingSize] = useState(true);
 
   useEffect(() => {
-    let initBoard = generateNewTile(board);
-    initBoard = generateNewTile(initBoard);
-    setBoard(initBoard);
-  }, []);
+    setBoard(() => {
+      const newBoard = new Array(size);
+      for (let i = 0; i < size; i++) {
+        let newRow = new Array(size);
+        for (let j = 0; j < size; j++) {
+          newRow[j] = 0;
+        }
+        newBoard[i] = newRow;
+      }
+      let search = true;
+      while (search) {
+        const index1 = Math.floor(Math.random() * newBoard.length);
+        const index2 = Math.floor(Math.random() * newBoard.length);
+        if (newBoard[index1][index2] === 0) {
+          newBoard[index1][index2] = Math.random() > 0.05 ? 2 : 4;
+          search = false;
+        }
+      }
 
-  const generateNewTile = (board) => {
+      search = true;
+      while (search) {
+        const index1 = Math.floor(Math.random() * newBoard.length);
+        const index2 = Math.floor(Math.random() * newBoard.length);
+        if (newBoard[index1][index2] === 0) {
+          newBoard[index1][index2] = Math.random() > 0.05 ? 2 : 4;
+          search = false;
+        }
+      }
+      return newBoard;
+    });
+  }, [size, isChoosingSize]);
+
+  function generateNewTile(board) {
     let search = true;
     let grid = cloneDeep(board);
     while (search) {
-      const index1 = Math.floor(Math.random() * 4);
-      const index2 = Math.floor(Math.random() * 4);
+      const index1 = Math.floor(Math.random() * board.length);
+      const index2 = Math.floor(Math.random() * board.length);
       if (grid[index1][index2] === 0) {
         grid[index1][index2] = Math.random() > 0.05 ? 2 : 4;
         search = false;
       }
     }
     return grid;
-  };
+  }
 
   function handleKeyUp({ key }) {
     if (key === "ArrowRight") {
@@ -51,7 +101,7 @@ const use2048 = (size) => {
     let oldGrid = board;
     let newGrid = cloneDeep(board);
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < oldGrid.length; i++) {
       let row = newGrid[i];
       row = combineRowLeft(row);
       newGrid[i] = row;
@@ -60,13 +110,14 @@ const use2048 = (size) => {
     if (JSON.stringify(oldGrid) !== JSON.stringify(newGrid)) {
       newGrid = generateNewTile(newGrid);
     }
+
     setBoard(newGrid);
   }
 
   function swipeRight() {
     let oldGrid = board;
     let newGrid = cloneDeep(board);
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < oldGrid.length; i++) {
       let row = newGrid[i];
       newGrid[i] = combineRowRight(row);
     }
@@ -80,7 +131,7 @@ const use2048 = (size) => {
     let oldGrid = board;
     let newGrid = cloneDeep(board);
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < newGrid.length; i++) {
       let row = [];
       for (let j = 0; j < newGrid.length; j++) {
         row.push(newGrid[j][i]);
@@ -99,7 +150,7 @@ const use2048 = (size) => {
   function swipeDown() {
     let oldGrid = board;
     let newGrid = cloneDeep(board);
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < oldGrid.length; i++) {
       let row = [];
       for (let j = 0; j < newGrid.length; j++) {
         row.push(newGrid[j][i]);
@@ -153,7 +204,7 @@ const use2048 = (size) => {
     let fast = slow + 1;
 
     while (slow < 3) {
-      if (fast === 4) {
+      if (fast === row.length) {
         slow++;
         fast = slow + 1;
         continue;
@@ -186,20 +237,19 @@ const use2048 = (size) => {
     setScore((prev) => prev + scoreToAdd);
   }
 
-  function startNewGame() {
+  function startNewGame(setIs) {
     setScore(0);
-    let clearBoard = [
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-      [0, 0, 0, 0],
-    ];
-    clearBoard = generateNewTile(clearBoard);
-    clearBoard = generateNewTile(clearBoard);
-    setBoard(clearBoard);
+    setIsChoosingSize(true);
   }
 
-  return { board, score, startNewGame, handleKeyUp };
+  return {
+    board,
+    score,
+    isChoosingSize,
+    startNewGame,
+    handleKeyUp,
+    setIsChoosingSize,
+  };
 };
 
 export default use2048;

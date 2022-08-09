@@ -1,6 +1,6 @@
 import React from "react";
 
-const Header = ({ score, startNewGame }) => {
+const Header = ({ score, setIsModalOpened }) => {
   return (
     <div className="flex justify-between py-4 items-center">
       <div className="text-6xl text-number-dark font-bold">2048</div>
@@ -21,7 +21,7 @@ const Header = ({ score, startNewGame }) => {
         </div>
         <div
           className="cursor-pointer bg-newgame text-white font-bold rounded py-2 px-3"
-          onClick={startNewGame}
+          onClick={() => setIsModalOpened(true)}
         >
           New Game
         </div>

@@ -3,21 +3,38 @@ import use2048 from "../hooks/use2048";
 import Board from "./Board";
 import Header from "./Header";
 import ChooseSize from "./ChooseSize";
+import Modal from "./Modal";
 
 const Game = () => {
   const [size, setSize] = useState(4);
-  const { board, score, startNewGame, handleKeyUp } = use2048(size);
-  const [isChoosingSize, setIsChoosingSize] = useState(true);
+  const [isModalOpened, setIsModalOpened] = useState(false);
+  console.log(isModalOpened);
+  const {
+    board,
+    score,
+    isChoosingSize,
+    startNewGame,
+    handleKeyUp,
+    setIsChoosingSize,
+  } = use2048(size, setIsModalOpened);
 
   useEffect(() => {
     window.addEventListener("keyup", handleKeyUp);
     return () => window.removeEventListener("keyup", handleKeyUp);
   }, [handleKeyUp]);
 
+  console.log(isModalOpened);
+
   return (
     <div className="border-red-500 m-16">
-      <Header score={score} startNewGame={startNewGame} />
-      {!isChoosingSize && <Board board={board} size={size} />}
+      {isModalOpened && (
+        <Modal
+          startNewGame={startNewGame}
+          setIsModalOpened={setIsModalOpened}
+        ></Modal>
+      )}
+      <Header score={score} setIsModalOpened={setIsModalOpened} />
+      {!isChoosingSize && <Board board={board} />}
       {isChoosingSize && (
         <ChooseSize
           setSize={setSize}

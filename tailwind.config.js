@@ -12,14 +12,15 @@ module.exports = {
     "bg-tile-above",
     "grid-cols-3",
     "grid-cols-4",
-    "grid-cols-7",
+    "grid-cols-5",
     "grid-rows-3",
     "grid-rows-4",
-    "grid-rows-7",
+    "grid-rows-5",
   ],
   theme: {
     colors: {
       white: "rgb(255 255 255)",
+      black: "rgb(0 0 0)",
       board: "#bbada0",
       background: "#faf8ef",
       newgame: "#8f7a66",

@@ -24,9 +24,9 @@ const ChooseSize = (props) => {
         </div>
         <div
           className="font-bold p-4 rounded text-2xl cursor-pointer text-white bg-newgame"
-          onClick={() => handleSizeSelect(7)}
+          onClick={() => handleSizeSelect(5)}
         >
-          7x7
+          5x5
         </div>
       </div>
     </div>
