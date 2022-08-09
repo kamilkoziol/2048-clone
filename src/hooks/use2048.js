@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { cloneDeep } from "lodash";
+import useLocalStorage from "./useLocalStorage";
 
 const use2048 = (size, setIsModalOpened) => {
   const [board, setBoard] = useState(() => {
@@ -34,6 +35,7 @@ const use2048 = (size, setIsModalOpened) => {
   });
   const [score, setScore] = useState(0);
   const [isChoosingSize, setIsChoosingSize] = useState(true);
+  const [best, setBest] = useLocalStorage("best", 0);
 
   useEffect(() => {
     setBoard(() => {
@@ -67,6 +69,12 @@ const use2048 = (size, setIsModalOpened) => {
       return newBoard;
     });
   }, [size, isChoosingSize]);
+
+  useEffect(() => {
+    if (score > best) {
+      setBest(score);
+    }
+  }, [score]);
 
   function generateNewTile(board) {
     let search = true;
@@ -246,6 +254,7 @@ const use2048 = (size, setIsModalOpened) => {
     board,
     score,
     isChoosingSize,
+    best,
     startNewGame,
     handleKeyUp,
     setIsChoosingSize,

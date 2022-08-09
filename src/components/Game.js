@@ -4,15 +4,18 @@ import Board from "./Board";
 import Header from "./Header";
 import ChooseSize from "./ChooseSize";
 import Modal from "./Modal";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 const Game = () => {
   const [size, setSize] = useState(4);
   const [isModalOpened, setIsModalOpened] = useState(false);
+
   console.log(isModalOpened);
   const {
     board,
     score,
     isChoosingSize,
+    best,
     startNewGame,
     handleKeyUp,
     setIsChoosingSize,
@@ -33,7 +36,11 @@ const Game = () => {
           setIsModalOpened={setIsModalOpened}
         ></Modal>
       )}
-      <Header score={score} setIsModalOpened={setIsModalOpened} />
+      <Header
+        score={score}
+        best={best}
+        setIsModalOpened={setIsModalOpened}
+      />
       {!isChoosingSize && <Board board={board} />}
       {isChoosingSize && (
         <ChooseSize
