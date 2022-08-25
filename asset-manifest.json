@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/kamilkoziol/2048-clone/static/css/main.4ebfb39d.css",
+    "main.js": "/kamilkoziol/2048-clone/static/js/main.70120da2.js",
+    "index.html": "/kamilkoziol/2048-clone/index.html",
+    "main.4ebfb39d.css.map": "/kamilkoziol/2048-clone/static/css/main.4ebfb39d.css.map",
+    "main.70120da2.js.map": "/kamilkoziol/2048-clone/static/js/main.70120da2.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4ebfb39d.css",
+    "static/js/main.70120da2.js"
+  ]
+}
